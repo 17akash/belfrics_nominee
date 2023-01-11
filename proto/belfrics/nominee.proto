@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package belfrics.belfrics;
+
+option go_package = "belfrics/x/belfrics/types";
+
+message NomineePost {
+  string creator = 1;
+  uint64 id = 2;
+  string accountHolder = 3; 
+  string nomineeAccount = 4; 
+}

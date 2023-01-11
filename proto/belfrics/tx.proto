@@ -1,0 +1,24 @@
+syntax = "proto3";
+package belfrics.belfrics;
+
+// this line is used by starport scaffolding # proto/tx/import
+
+option go_package = "belfrics/x/belfrics/types";
+
+// Msg defines the Msg service.
+service Msg {
+      rpc AddNominee(MsgAddNominee) returns (MsgAddNomineeResponse);
+// this line is used by starport scaffolding # proto/tx/rpc
+}
+
+message MsgAddNominee {
+  string creator = 1;
+  string accountHolder = 2;
+  string nomineeAccount = 3;
+}
+
+message MsgAddNomineeResponse {
+    uint64 id = 1;
+}
+
+// this line is used by starport scaffolding # proto/tx/message
