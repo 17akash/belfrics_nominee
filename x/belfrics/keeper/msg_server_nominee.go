@@ -10,8 +10,12 @@ import (
 func (k msgServer) Nominee(goCtx context.Context, msg *types.MsgNominee) (*types.MsgNomineeResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	// TODO: Handling the message
-	_ = ctx
+	var nomineePost = types.NomineePost{
+		Creator:        msg.Creator,
+		AccountHolder:  msg.AccountHolder,
+		NomineeAccount: msg.NomineeAccount,
+	}
+	id := k.AppendNominee(ctx, nomineePost)
 
-	return &types.MsgNomineeResponse{}, nil
+	return &types.MsgNomineeResponse{Id: id}, nil
 }

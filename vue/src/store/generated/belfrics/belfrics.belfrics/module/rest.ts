@@ -9,12 +9,20 @@
  * ---------------------------------------------------------------
  */
 
-export type BelfricsMsgNomineeResponse = object;
+export interface BelfricsMsgNomineeResponse {
+  /** @format uint64 */
+  id?: string;
+}
 
 /**
  * Params defines the parameters for the module.
  */
 export type BelfricsParams = object;
+
+export interface BelfricsQueryNomineesResponse {
+  accountHolder?: string;
+  nomineeAccount?: string;
+}
 
 /**
  * QueryParamsResponse is response type for the Query/Params RPC method.
@@ -231,6 +239,22 @@ export class HttpClient<SecurityDataType = unknown> {
  * @version version not set
  */
 export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDataType> {
+  /**
+   * No description
+   *
+   * @tags Query
+   * @name QueryNominees
+   * @summary Queries a list of Nominees items.
+   * @request GET:/belfrics/belfrics/nominees
+   */
+  queryNominees = (params: RequestParams = {}) =>
+    this.request<BelfricsQueryNomineesResponse, RpcStatus>({
+      path: `/belfrics/belfrics/nominees`,
+      method: "GET",
+      format: "json",
+      ...params,
+    });
+
   /**
    * No description
    *

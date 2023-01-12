@@ -4,6 +4,40 @@ info:
   name: ''
   description: ''
 paths:
+  /belfrics/belfrics/nominees:
+    get:
+      summary: Queries a list of Nominees items.
+      operationId: BelfricsBelfricsNominees
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              accountHolder:
+                type: string
+              nomineeAccount:
+                type: string
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      tags:
+        - Query
   /belfrics/belfrics/params:
     get:
       summary: Parameters queries the parameters of the module.
@@ -30549,9 +30583,20 @@ paths:
 definitions:
   belfrics.belfrics.MsgNomineeResponse:
     type: object
+    properties:
+      id:
+        type: string
+        format: uint64
   belfrics.belfrics.Params:
     type: object
     description: Params defines the parameters for the module.
+  belfrics.belfrics.QueryNomineesResponse:
+    type: object
+    properties:
+      accountHolder:
+        type: string
+      nomineeAccount:
+        type: string
   belfrics.belfrics.QueryParamsResponse:
     type: object
     properties:

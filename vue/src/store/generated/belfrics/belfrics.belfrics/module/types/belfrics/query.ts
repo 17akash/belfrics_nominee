@@ -13,6 +13,13 @@ export interface QueryParamsResponse {
   params: Params | undefined;
 }
 
+export interface QueryNomineesRequest {}
+
+export interface QueryNomineesResponse {
+  accountHolder: string;
+  nomineeAccount: string;
+}
+
 const baseQueryParamsRequest: object = {};
 
 export const QueryParamsRequest = {
@@ -110,10 +117,132 @@ export const QueryParamsResponse = {
   },
 };
 
+const baseQueryNomineesRequest: object = {};
+
+export const QueryNomineesRequest = {
+  encode(_: QueryNomineesRequest, writer: Writer = Writer.create()): Writer {
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): QueryNomineesRequest {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = { ...baseQueryNomineesRequest } as QueryNomineesRequest;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(_: any): QueryNomineesRequest {
+    const message = { ...baseQueryNomineesRequest } as QueryNomineesRequest;
+    return message;
+  },
+
+  toJSON(_: QueryNomineesRequest): unknown {
+    const obj: any = {};
+    return obj;
+  },
+
+  fromPartial(_: DeepPartial<QueryNomineesRequest>): QueryNomineesRequest {
+    const message = { ...baseQueryNomineesRequest } as QueryNomineesRequest;
+    return message;
+  },
+};
+
+const baseQueryNomineesResponse: object = {
+  accountHolder: "",
+  nomineeAccount: "",
+};
+
+export const QueryNomineesResponse = {
+  encode(
+    message: QueryNomineesResponse,
+    writer: Writer = Writer.create()
+  ): Writer {
+    if (message.accountHolder !== "") {
+      writer.uint32(10).string(message.accountHolder);
+    }
+    if (message.nomineeAccount !== "") {
+      writer.uint32(18).string(message.nomineeAccount);
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): QueryNomineesResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = { ...baseQueryNomineesResponse } as QueryNomineesResponse;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.accountHolder = reader.string();
+          break;
+        case 2:
+          message.nomineeAccount = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QueryNomineesResponse {
+    const message = { ...baseQueryNomineesResponse } as QueryNomineesResponse;
+    if (object.accountHolder !== undefined && object.accountHolder !== null) {
+      message.accountHolder = String(object.accountHolder);
+    } else {
+      message.accountHolder = "";
+    }
+    if (object.nomineeAccount !== undefined && object.nomineeAccount !== null) {
+      message.nomineeAccount = String(object.nomineeAccount);
+    } else {
+      message.nomineeAccount = "";
+    }
+    return message;
+  },
+
+  toJSON(message: QueryNomineesResponse): unknown {
+    const obj: any = {};
+    message.accountHolder !== undefined &&
+      (obj.accountHolder = message.accountHolder);
+    message.nomineeAccount !== undefined &&
+      (obj.nomineeAccount = message.nomineeAccount);
+    return obj;
+  },
+
+  fromPartial(
+    object: DeepPartial<QueryNomineesResponse>
+  ): QueryNomineesResponse {
+    const message = { ...baseQueryNomineesResponse } as QueryNomineesResponse;
+    if (object.accountHolder !== undefined && object.accountHolder !== null) {
+      message.accountHolder = object.accountHolder;
+    } else {
+      message.accountHolder = "";
+    }
+    if (object.nomineeAccount !== undefined && object.nomineeAccount !== null) {
+      message.nomineeAccount = object.nomineeAccount;
+    } else {
+      message.nomineeAccount = "";
+    }
+    return message;
+  },
+};
+
 /** Query defines the gRPC querier service. */
 export interface Query {
   /** Parameters queries the parameters of the module. */
   Params(request: QueryParamsRequest): Promise<QueryParamsResponse>;
+  /** Queries a list of Nominees items. */
+  Nominees(request: QueryNomineesRequest): Promise<QueryNomineesResponse>;
 }
 
 export class QueryClientImpl implements Query {
@@ -125,6 +254,18 @@ export class QueryClientImpl implements Query {
     const data = QueryParamsRequest.encode(request).finish();
     const promise = this.rpc.request("belfrics.belfrics.Query", "Params", data);
     return promise.then((data) => QueryParamsResponse.decode(new Reader(data)));
+  }
+
+  Nominees(request: QueryNomineesRequest): Promise<QueryNomineesResponse> {
+    const data = QueryNomineesRequest.encode(request).finish();
+    const promise = this.rpc.request(
+      "belfrics.belfrics.Query",
+      "Nominees",
+      data
+    );
+    return promise.then((data) =>
+      QueryNomineesResponse.decode(new Reader(data))
+    );
   }
 }
 

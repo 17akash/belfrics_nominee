@@ -15,6 +15,10 @@ const (
 
 	// MemStoreKey defines the in-memory store key
 	MemStoreKey = "mem_belfrics"
+
+	// Keep track of the index of nomionees
+	NomineeKey      = "Nominee/value/"
+	NomineeCountKey = "Nominee/count/"
 )
 
 func KeyPrefix(p string) []byte {
