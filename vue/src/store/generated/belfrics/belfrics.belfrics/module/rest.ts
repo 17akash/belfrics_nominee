@@ -9,6 +9,8 @@
  * ---------------------------------------------------------------
  */
 
+export type BelfricsMsgNomineeResponse = object;
+
 /**
  * Params defines the parameters for the module.
  */

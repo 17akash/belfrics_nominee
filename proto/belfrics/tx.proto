@@ -7,7 +7,17 @@ option go_package = "belfrics/x/belfrics/types";
 
 // Msg defines the Msg service.
 service Msg {
-    // this line is used by starport scaffolding # proto/tx/rpc
+      rpc Nominee(MsgNominee) returns (MsgNomineeResponse);
+// this line is used by starport scaffolding # proto/tx/rpc
+}
+
+message MsgNominee {
+  string creator = 1;
+  string accountHolder = 2;
+  string nomineeAccount = 3;
+}
+
+message MsgNomineeResponse {
 }
 
 // this line is used by starport scaffolding # proto/tx/message

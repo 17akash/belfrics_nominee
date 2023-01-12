@@ -30547,6 +30547,8 @@ paths:
       tags:
         - Query
 definitions:
+  belfrics.belfrics.MsgNomineeResponse:
+    type: object
   belfrics.belfrics.Params:
     type: object
     description: Params defines the parameters for the module.
