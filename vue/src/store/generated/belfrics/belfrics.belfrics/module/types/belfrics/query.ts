@@ -1,6 +1,11 @@
 /* eslint-disable */
 import { Reader, Writer } from "protobufjs/minimal";
 import { Params } from "../belfrics/params";
+import {
+  PageRequest,
+  PageResponse,
+} from "../cosmos/base/query/v1beta1/pagination";
+import { NomineePost } from "../belfrics/nominee";
 
 export const protobufPackage = "belfrics.belfrics";
 
@@ -13,11 +18,14 @@ export interface QueryParamsResponse {
   params: Params | undefined;
 }
 
-export interface QueryNomineesRequest {}
+export interface QueryNomineesRequest {
+  /** Adding pagination to request */
+  pagination: PageRequest | undefined;
+}
 
 export interface QueryNomineesResponse {
-  accountHolder: string;
-  nomineeAccount: string;
+  NomineePost: NomineePost[];
+  pagination: PageResponse | undefined;
 }
 
 const baseQueryParamsRequest: object = {};
@@ -120,7 +128,13 @@ export const QueryParamsResponse = {
 const baseQueryNomineesRequest: object = {};
 
 export const QueryNomineesRequest = {
-  encode(_: QueryNomineesRequest, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: QueryNomineesRequest,
+    writer: Writer = Writer.create()
+  ): Writer {
+    if (message.pagination !== undefined) {
+      PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
+    }
     return writer;
   },
 
@@ -131,6 +145,9 @@ export const QueryNomineesRequest = {
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
+        case 1:
+          message.pagination = PageRequest.decode(reader, reader.uint32());
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -139,37 +156,51 @@ export const QueryNomineesRequest = {
     return message;
   },
 
-  fromJSON(_: any): QueryNomineesRequest {
+  fromJSON(object: any): QueryNomineesRequest {
     const message = { ...baseQueryNomineesRequest } as QueryNomineesRequest;
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageRequest.fromJSON(object.pagination);
+    } else {
+      message.pagination = undefined;
+    }
     return message;
   },
 
-  toJSON(_: QueryNomineesRequest): unknown {
+  toJSON(message: QueryNomineesRequest): unknown {
     const obj: any = {};
+    message.pagination !== undefined &&
+      (obj.pagination = message.pagination
+        ? PageRequest.toJSON(message.pagination)
+        : undefined);
     return obj;
   },
 
-  fromPartial(_: DeepPartial<QueryNomineesRequest>): QueryNomineesRequest {
+  fromPartial(object: DeepPartial<QueryNomineesRequest>): QueryNomineesRequest {
     const message = { ...baseQueryNomineesRequest } as QueryNomineesRequest;
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageRequest.fromPartial(object.pagination);
+    } else {
+      message.pagination = undefined;
+    }
     return message;
   },
 };
 
-const baseQueryNomineesResponse: object = {
-  accountHolder: "",
-  nomineeAccount: "",
-};
+const baseQueryNomineesResponse: object = {};
 
 export const QueryNomineesResponse = {
   encode(
     message: QueryNomineesResponse,
     writer: Writer = Writer.create()
   ): Writer {
-    if (message.accountHolder !== "") {
-      writer.uint32(10).string(message.accountHolder);
+    for (const v of message.NomineePost) {
+      NomineePost.encode(v!, writer.uint32(10).fork()).ldelim();
     }
-    if (message.nomineeAccount !== "") {
-      writer.uint32(18).string(message.nomineeAccount);
+    if (message.pagination !== undefined) {
+      PageResponse.encode(
+        message.pagination,
+        writer.uint32(18).fork()
+      ).ldelim();
     }
     return writer;
   },
@@ -178,14 +209,15 @@ export const QueryNomineesResponse = {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseQueryNomineesResponse } as QueryNomineesResponse;
+    message.NomineePost = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.accountHolder = reader.string();
+          message.NomineePost.push(NomineePost.decode(reader, reader.uint32()));
           break;
         case 2:
-          message.nomineeAccount = reader.string();
+          message.pagination = PageResponse.decode(reader, reader.uint32());
           break;
         default:
           reader.skipType(tag & 7);
@@ -197,25 +229,33 @@ export const QueryNomineesResponse = {
 
   fromJSON(object: any): QueryNomineesResponse {
     const message = { ...baseQueryNomineesResponse } as QueryNomineesResponse;
-    if (object.accountHolder !== undefined && object.accountHolder !== null) {
-      message.accountHolder = String(object.accountHolder);
-    } else {
-      message.accountHolder = "";
+    message.NomineePost = [];
+    if (object.NomineePost !== undefined && object.NomineePost !== null) {
+      for (const e of object.NomineePost) {
+        message.NomineePost.push(NomineePost.fromJSON(e));
+      }
     }
-    if (object.nomineeAccount !== undefined && object.nomineeAccount !== null) {
-      message.nomineeAccount = String(object.nomineeAccount);
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageResponse.fromJSON(object.pagination);
     } else {
-      message.nomineeAccount = "";
+      message.pagination = undefined;
     }
     return message;
   },
 
   toJSON(message: QueryNomineesResponse): unknown {
     const obj: any = {};
-    message.accountHolder !== undefined &&
-      (obj.accountHolder = message.accountHolder);
-    message.nomineeAccount !== undefined &&
-      (obj.nomineeAccount = message.nomineeAccount);
+    if (message.NomineePost) {
+      obj.NomineePost = message.NomineePost.map((e) =>
+        e ? NomineePost.toJSON(e) : undefined
+      );
+    } else {
+      obj.NomineePost = [];
+    }
+    message.pagination !== undefined &&
+      (obj.pagination = message.pagination
+        ? PageResponse.toJSON(message.pagination)
+        : undefined);
     return obj;
   },
 
@@ -223,15 +263,16 @@ export const QueryNomineesResponse = {
     object: DeepPartial<QueryNomineesResponse>
   ): QueryNomineesResponse {
     const message = { ...baseQueryNomineesResponse } as QueryNomineesResponse;
-    if (object.accountHolder !== undefined && object.accountHolder !== null) {
-      message.accountHolder = object.accountHolder;
-    } else {
-      message.accountHolder = "";
+    message.NomineePost = [];
+    if (object.NomineePost !== undefined && object.NomineePost !== null) {
+      for (const e of object.NomineePost) {
+        message.NomineePost.push(NomineePost.fromPartial(e));
+      }
     }
-    if (object.nomineeAccount !== undefined && object.nomineeAccount !== null) {
-      message.nomineeAccount = object.nomineeAccount;
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageResponse.fromPartial(object.pagination);
     } else {
-      message.nomineeAccount = "";
+      message.pagination = undefined;
     }
     return message;
   },

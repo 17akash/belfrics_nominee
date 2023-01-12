@@ -15,7 +15,7 @@ export const registry = new Registry(<any>types);
 
 const defaultFee = {
   amount: [],
-  gas: "200000",
+  gas: "1000",
 };
 
 interface TxClientOptions {

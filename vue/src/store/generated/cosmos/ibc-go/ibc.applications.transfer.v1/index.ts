@@ -204,7 +204,7 @@ export default {
 				const txClient=await initTxClient(rootGetters)
 				const msg = await txClient.msgTransfer(value)
 				const result = await txClient.signAndBroadcast([msg], {fee: { amount: fee, 
-	gas: "200000" }, memo})
+	gas: "1000" }, memo})
 				return result
 			} catch (e) {
 				if (e == MissingWalletError) {

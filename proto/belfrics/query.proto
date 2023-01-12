@@ -5,6 +5,7 @@ import "gogoproto/gogo.proto";
 import "google/api/annotations.proto";
 import "cosmos/base/query/v1beta1/pagination.proto";
 import "belfrics/params.proto";
+import "belfrics/nominee.proto";
 // this line is used by starport scaffolding # 1
 
 option go_package = "belfrics/x/belfrics/types";
@@ -33,11 +34,13 @@ message QueryParamsResponse {
 }
 
 message QueryNomineesRequest {
+  // Adding pagination to request
+  cosmos.base.query.v1beta1.PageRequest pagination = 1;
 }
 
 message QueryNomineesResponse {
-  string accountHolder = 1;
-  string nomineeAccount = 2;
+  repeated NomineePost NomineePost = 1;
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }
 
 // this line is used by starport scaffolding # 3

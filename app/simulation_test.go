@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"belfrics/app"
+
 	"github.com/cosmos/cosmos-sdk/baseapp"
 	"github.com/cosmos/cosmos-sdk/codec"
 	"github.com/cosmos/cosmos-sdk/simapp"
@@ -39,8 +40,8 @@ type SimApp interface {
 
 var defaultConsensusParams = &abci.ConsensusParams{
 	Block: &abci.BlockParams{
-		MaxBytes: 200000,
-		MaxGas:   2000000,
+		MaxBytes: 1000,
+		MaxGas:   1000,
 	},
 	Evidence: &tmproto.EvidenceParams{
 		MaxAgeNumBlocks: 302400,
