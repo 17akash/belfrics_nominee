@@ -12,9 +12,11 @@ func (k msgServer) CreatePost(goCtx context.Context, msg *types.MsgCreatePost) (
 
 	// TODO: Handling the message
 	var post = types.Post{
-		Creator: msg.Creator,
-		Title:   msg.Title,
-		Body:    msg.Body,
+		Creator:   msg.Creator,
+		Title:     msg.Title,
+		Body:      msg.Body,
+		CreatedAt: ctx.BlockHeight(),
+		Id:        msg.Id,
 	}
 
 	// Add a post to the store and get back the ID
